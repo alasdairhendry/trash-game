@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 245cde79d4de65a4183cfa8fdc2e1333, type: 3}
+  m_Name: Rifle
+  m_EditorClassIdentifier: 
+  weaponName: Rifle
+  weaponType: 1
+  activeBodyPart: 18
+  ikData: {fileID: 11400000, guid: 2881f764a6fb4fb4097dfdfe99efefd1, type: 2}
+  inVehicleIkData: {fileID: 0}
+  holsterData: {fileID: 11400000, guid: 95980f7d429e8204a82bfce3d087bcf0, type: 2}
+  holsterBodyPart: 54
+  fireRate: 600
+  burstDelay: 60
+  reloadTime: 2
+  clipSize: 30
+  maxDistance: 350
+  maxDamage: 50
+  damageByDistanceFalloff:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1.8393456
+      outSlope: -1.8393456
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.023059547
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  fireTypes: 0200000000000000
+  audioClipFire: {fileID: 8300000, guid: 1b766da7cc2d648aa84e36cb5fe8abcb, type: 3}
+  audioClipEmptyFire: {fileID: 8300000, guid: 9423065c1c0d64ea3a434687a804188b, type: 3}
+  audioClipReload: {fileID: 8300000, guid: e5198250a6a57408bb36e14bc4a322c4, type: 3}
+  recoilData: {fileID: 11400000, guid: 3bcaf5500a33bc543bf2c73166217029, type: 2}
+  prefab: {fileID: 2865452233086558167, guid: 5ecadac39305a1a49aca74645a233248, type: 3}
+  muzzlePrefab: {fileID: 2863813779174926588, guid: 3d37f9eec9fd45f4eaa0a3f5fcd9f0b5,
+    type: 3}
+  offsetPosition: {x: 0.0112, y: 0.0015, z: -0.0023}
+  offsetRotation: {x: -0.00016392455, y: 90.00003, z: 263.84988}
+  localScale: {x: 0.1, y: 0.1, z: 0.10000002}
+  clipTextLocalPosition: {x: 0.2, y: 0.2, z: 0}
+  clipTextHolsteredLocalPosition: {x: -0.1, y: 0, z: 0}

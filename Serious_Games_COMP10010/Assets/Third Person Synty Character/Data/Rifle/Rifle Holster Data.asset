@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f5103f3b3014bf40b7043c1faf0af8c, type: 3}
+  m_Name: Rifle Holster Data
+  m_EditorClassIdentifier: 
+  position: {x: -0.0011, y: 0.0149, z: 0.0214}
+  eulerAngles: {x: 352.1837, y: 121.3961, z: 271.3621}
+  localScale: {x: 0.1, y: 0.1, z: 0.1}
