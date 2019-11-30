@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33545257108992644}
   - component: {fileID: 23313274576994502}
   - component: {fileID: -2892702968236724755}
+  - component: {fileID: 1907738787984412195}
   m_Layer: 0
   m_Name: SM_Env_Road_Crossing_01
   m_TagString: Untagged
@@ -93,3 +94,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 51d7c18029eea8d4eb4febebf092e330, type: 3}
+--- !u!114 &1907738787984412195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1694974523015518}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 4
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff

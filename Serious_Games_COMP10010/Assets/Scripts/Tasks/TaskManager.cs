@@ -59,13 +59,12 @@ public class TaskManager : MonoBehaviour
     private void CreateTasks ()
     {
         tasks.Add ( new Task01 () );
-        tasks.Add ( new Task07 () );
-        return;
         tasks.Add ( new Task02 () );
         tasks.Add ( new Task03 () );
         tasks.Add ( new Task04 () );
         tasks.Add ( new Task05 () );
         tasks.Add ( new Task06 () );
+        tasks.Add ( new Task07 () );
         tasks.Add ( new Task08 () );
         tasks.Add ( new Task09 () );
         tasks.Add ( new Task10 () );

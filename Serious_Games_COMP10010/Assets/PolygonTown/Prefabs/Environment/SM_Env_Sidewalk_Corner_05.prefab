@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33192459574175254}
   - component: {fileID: 23492839922762070}
   - component: {fileID: -9120587813085216367}
+  - component: {fileID: -6040885081084759602}
   m_Layer: 0
   m_Name: SM_Env_Sidewalk_Corner_05
   m_TagString: Untagged
@@ -93,3 +94,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 203bf46293bb7b847a15d8332fd6650f, type: 3}
+--- !u!114 &-6040885081084759602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1682064756997270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 1
+  m_Area: 3
+  m_IgnoreFromBuild: 0
+  m_AffectedAgents: ffffffff

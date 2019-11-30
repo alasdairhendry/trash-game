@@ -17,7 +17,7 @@ public class CameraClipping : MonoBehaviour
             distances[i] = 0;
         }
 
-        distances[10] = x;
+        distances[11] = x;
 
         cam.layerCullSpherical = true;
         cam.layerCullDistances = distances;
@@ -28,7 +28,7 @@ public class CameraClipping : MonoBehaviour
         if (cam == null) return;
         if (Application.isPlaying)
         {
-            distances[10] = x;
+            distances[11] = x;
             cam.layerCullDistances = distances;
         }
     }
