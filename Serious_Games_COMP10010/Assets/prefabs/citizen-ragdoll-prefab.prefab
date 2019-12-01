@@ -5638,6 +5638,7 @@ MonoBehaviour:
   anim: {fileID: 4391085755828979540}
   cNav: {fileID: 7565351741602395721}
   cRag: {fileID: 1941686852474359924}
+  cCon: {fileID: 0}
   cityMeshRoot: {fileID: 7255560535409056627}
   townMeshRoot: {fileID: 7255560535305024487}
 --- !u!114 &4391085755828979536
@@ -5689,7 +5690,7 @@ MonoBehaviour:
   animator: {fileID: 4391085755828979540}
   travelRadius: 100
   forwardDamping: 5
-  verifyPathIndexDistance: 2
+  verifyPathIndexDistance: 4
   lookRotation: 2.5
   citizen: {fileID: 4391085755828979541}
 --- !u!114 &1941686852474359924

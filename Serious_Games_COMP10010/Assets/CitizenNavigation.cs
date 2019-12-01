@@ -140,7 +140,10 @@ public class CitizenNavigation : MonoBehaviour
 
         if (IsNavigating)
         {
-            transform.rotation = Quaternion.Slerp ( transform.rotation, LookDir, Time.deltaTime * lookRotation );
+            if (!citizen.IsCulled)
+            {
+                transform.rotation = Quaternion.Slerp ( transform.rotation, LookDir, Time.deltaTime * lookRotation );
+            }
         }
     }
 

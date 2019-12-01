@@ -35,6 +35,7 @@ public class Citizen : MonoBehaviour
         Initialise ( CitizenType.City, transform.position, FindObjectOfType<CitizenController> () );
     }
 
+
     public void Initialise (CitizenType type, Vector3 position, CitizenController cCon)
     {
         this.cCon = cCon;
@@ -94,6 +95,7 @@ public class Citizen : MonoBehaviour
 
     public void SetIsCulled (bool state)
     {
-        IsCulled = state;
+        if (state != IsCulled)
+            IsCulled = state;
     }
 }

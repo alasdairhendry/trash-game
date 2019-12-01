@@ -44,40 +44,58 @@ public class TrashManager : MonoBehaviour
         }
     }
 
-    [NaughtyAttributes.Button]
-    public void Add ()
-    {
-        Debug.ClearDeveloperConsole ();
-        AddTrash ( type );
-    }
-
     private void Update ()
     {
-        plasticCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)plasticCollectedTextTarget, (float)plasticCollected, Time.deltaTime * uiDamp ) );
-        paperCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)paperCollectedTextTarget, (float)paperCollected, Time.deltaTime * uiDamp ) );
-        glassCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)glassCollectedTextTarget, (float)glassCollected, Time.deltaTime * uiDamp ) );
-        foodCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)foodCollectedTextTarget, (float)foodCollected, Time.deltaTime * uiDamp ) );
-        metalCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)metalCollectedTextTarget, (float)metalCollected, Time.deltaTime * uiDamp ) );
+        if (plasticCollectedTextTarget != plasticCollected)
+        {
+            plasticCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)plasticCollectedTextTarget, (float)plasticCollected, Time.deltaTime * uiDamp ) );
+            plasticText.text = plasticCollectedTextTarget.ToString ( "0" );
+        }
 
-        plasticText.text = plasticCollectedTextTarget.ToString("0");
-        paperText.text = paperCollectedTextTarget.ToString("0");
-        glassText.text = glassCollectedTextTarget.ToString("0");
-        foodText.text = foodCollectedTextTarget.ToString("0");
-        metalText.text = metalCollectedTextTarget.ToString("0");
+        if (paperCollectedTextTarget != paperCollected)
+        {
+            paperCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)paperCollectedTextTarget, (float)paperCollected, Time.deltaTime * uiDamp ) );
+            paperText.text = paperCollectedTextTarget.ToString ( "0" );
+        }
+
+        if (glassCollectedTextTarget != glassCollected)
+        {
+            glassCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)glassCollectedTextTarget, (float)glassCollected, Time.deltaTime * uiDamp ) );
+            glassText.text = glassCollectedTextTarget.ToString ( "0" );
+        }
+
+        if (foodCollectedTextTarget != foodCollected)
+        {
+            foodCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)foodCollectedTextTarget, (float)foodCollected, Time.deltaTime * uiDamp ) );
+            foodText.text = foodCollectedTextTarget.ToString ( "0" );
+        }
+
+        if (metalCollectedTextTarget != metalCollected)
+        {
+            metalCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)metalCollectedTextTarget, (float)metalCollected, Time.deltaTime * uiDamp ) );
+            metalText.text = metalCollectedTextTarget.ToString ( "0" );
+        }
     }
+
+    int[] toAdd = new int[5];
 
     public void AddTrash (TrashType type, int amount = 0)
     {
         if (amount <= 0)
         {
             amount = Random.Range ( minTrashToAdd, maxTrashToAdd );
-            amount *= FindObjectOfType<MultiplierManager> ().GetCurrentMultiplier;
+            amount *= MultiplierManager.instance.GetCurrentMultiplier;
         }
 
         switch (type)
         {
             case TrashType.Bag:
-                    int[] toAdd = new int[5];
+                toAdd[0] = 0;
+                toAdd[1] = 0;
+                toAdd[2] = 0;
+                toAdd[3] = 0;
+                toAdd[4] = 0;
+
                 for (int i = 0; i < amount; i++)
                 {
                     int random = Random.Range ( 0, 5 );

@@ -179,11 +179,15 @@ public class CitizenController : MonoBehaviour
     {
         if (!cNav.IsNavigating) return;
 
-        if (Vector3.Distance ( cNav.transform.position, mainCamera.position ) > 100.0f)
+        if ((cNav.transform.position - mainCamera.position).sqrMagnitude > 10000.0f)
         {
-            cNav.DelayedQueueMonitor ( 0.25f );
+            cNav.ForwardTarget = 0.0f;
+            cNav.DelayedQueueMonitor ( 1.0f );
+            cNav.Citizen.SetIsCulled ( true );
             return;
         }
+
+        cNav.Citizen.SetIsCulled ( false );
 
         if (cNav.PathCornerIndex >= cNav.PathNodes.Length - 1)
         {
@@ -194,7 +198,7 @@ public class CitizenController : MonoBehaviour
         }
         else
         {
-            if (Vector3.Distance ( cNav.transform.position, cNav.PathNodes[cNav.PathCornerIndex + 1] ) < cNav.VerifyPathIndexDistance)
+            if ( ( cNav.transform.position- cNav.PathNodes[cNav.PathCornerIndex + 1] ).sqrMagnitude < cNav.VerifyPathIndexDistance)
             {
                 cNav.PathCornerIndex++;
                 cNav.DelayedQueueMonitor ( 0.25f );
