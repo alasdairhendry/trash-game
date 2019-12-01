@@ -20,17 +20,25 @@ public class Citizen : MonoBehaviour
     [SerializeField] private Animator anim;
 
     [SerializeField] private CitizenNavigation cNav;
+    [SerializeField] private CitizenRagdoll cRag;
+    [SerializeField] private CitizenController cCon;
 
-    public bool IsCulled { get; set; }
+    [SerializeField] private GameObject cityMeshRoot;
+    [SerializeField] private GameObject townMeshRoot;
+
+    public bool IsCulled { get; protected set; }
+    public bool isDead { get; protected set; }
 
     [NaughtyAttributes.Button]
     public void RandomInit ()
     {
-        Initialise ( CitizenType.City, transform.position );
+        Initialise ( CitizenType.City, transform.position, FindObjectOfType<CitizenController> () );
     }
 
-    public void Initialise (CitizenType type, Vector3 position)
+    public void Initialise (CitizenType type, Vector3 position, CitizenController cCon)
     {
+        this.cCon = cCon;
+        citizenType = type;
         transform.position = position;
 
         int random = 0;
@@ -45,7 +53,8 @@ public class Citizen : MonoBehaviour
                 activeGraphic.GetComponent<SkinnedMeshRenderer> ().material = cityMaterials[Random.Range ( 0, cityMaterials.Count )];
 
                 anim.avatar = cityAvatar;
-
+                cityMeshRoot.SetActive ( true );
+                townMeshRoot.SetActive ( false );
                 break;
             case CitizenType.Town:
                 random = Random.Range ( 0, townGraphics.Count );
@@ -55,9 +64,36 @@ public class Citizen : MonoBehaviour
                 activeGraphic.GetComponent<SkinnedMeshRenderer> ().material = townMaterials[Random.Range ( 0, townMaterials.Count )];
 
                 anim.avatar = townAvatar;
+                townMeshRoot.SetActive ( true );
+                cityMeshRoot.SetActive ( false );
                 break;
         }
 
-        cNav.Initialise ();
+        cNav.Initialise ( cCon );
+    }
+
+    private void OnTriggerEnter (Collider other)
+    {
+        if (other.CompareTag ( "truck" ))
+        {
+            isDead = true;
+            cCon.OnDeath ( this );
+
+            GetComponent<Collider> ().enabled = false;
+            anim.enabled = false;
+            cRag.Die ( citizenType, activeGraphic );
+
+            Rigidbody rb = GetComponentInChildren<Rigidbody> ();
+
+            if (rb)
+            {
+                rb.AddForce ( (transform.position-  other.transform.position ).normalized * 256.0f, ForceMode.Impulse );
+            }
+        }
+    }
+
+    public void SetIsCulled (bool state)
+    {
+        IsCulled = state;
     }
 }

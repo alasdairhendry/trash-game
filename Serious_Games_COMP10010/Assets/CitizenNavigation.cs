@@ -5,169 +5,153 @@ public class CitizenNavigation : MonoBehaviour
 {
     [SerializeField] private Animator animator;
     [SerializeField] private float travelRadius;
-    private NavMeshPath currentPath;
-    private Vector3[] pathNodes;
-
-    private bool isNavigating = false;
-    private int pathCornerIndex;
-
-    private float forwardTarget = 0.0f;
+    public NavMeshPath currentPath;
+    private float currentForward = 0.0f;
 
     [SerializeField] private float forwardDamping = 5.0f;
     [SerializeField] private float verifyPathIndexDistance = 1.0f;
     [SerializeField] private float lookRotation = 7.5f;
+    private Camera mainCamera;
+    private CitizenController cController;
+    [SerializeField] private Citizen citizen;
 
-    NavMeshAgent agent;
+    public float TravelRadius { get => travelRadius; }
+    public NavMeshAgent Agent { get; private set; }
+    public bool IsNavigating { get; set; } = false;
+    public int PathCornerIndex { get; set; }
+    public Vector3[] PathNodes { get; set; }
+    public float VerifyPathIndexDistance { get => verifyPathIndexDistance; }
+    public Quaternion LookDir { get; set; } = Quaternion.identity;
+    public float ForwardTarget { get; set; } = 0.0f;
+    public Citizen Citizen { get => citizen; }
 
-    [SerializeField] private Transform overrideTransform;
+    private bool isRunning = false;
 
-    public void Initialise ()
+    public void Initialise (CitizenController cController)
     {
-        SetupAgent ();
-        CreateNewPath ();
+        this.cController = cController;
+        currentPath = new NavMeshPath ();
+        mainCamera = Camera.main;
+
+        if (SetupAgent ())
+        {
+            RequestNewPathImmediately ();
+            //InvokeRepeating ( nameof ( UpdateNavigation ), 0.25f, 0.25f );
+        }
     }
 
-    private void SetupAgent ()
+    private bool SetupAgent ()
     {
-        agent = GetComponent<NavMeshAgent> ();
+        Agent = GetComponent<NavMeshAgent> ();
 
         NavMeshHit hit;
 
         if (NavMesh.SamplePosition ( transform.position, out hit, 250.0f, 1 << NavMesh.GetAreaFromName ( "Pavement" ) ))
         {
-            agent.Warp ( hit.position );
+            Agent.Warp ( hit.position );
         }
 
-        agent.SetAreaCost ( NavMesh.GetAreaFromName ( "Pavement" ), 1 );
-        agent.SetAreaCost ( NavMesh.GetAreaFromName ( "Crossing" ), 1 );
-        agent.SetAreaCost ( NavMesh.GetAreaFromName ( "Walkable" ), 999 );
+        if (!Agent.isOnNavMesh)
+        {
+            if (NavMesh.SamplePosition ( transform.position, out hit, 50.0f, NavMesh.AllAreas ))
+            {
+                Agent.Warp ( hit.position );
+            }
+        }
 
-        //agent.enabled = false;
+        if (!Agent.isOnNavMesh)
+        {
+            transform.position = hit.position;
+            Agent.enabled = false;
+            Agent.enabled = true;
+        }
+
+        if (!Agent.isOnNavMesh)
+        {
+            Destroy ( this.gameObject );
+            return false;
+        }
+
+        Agent.SetAreaCost ( NavMesh.GetAreaFromName ( "Pavement" ), 1 );
+        Agent.SetAreaCost ( NavMesh.GetAreaFromName ( "Crossing" ), 1 );
+        Agent.SetAreaCost ( NavMesh.GetAreaFromName ( "Walkable" ), 999 );
 
         float speed = Random.Range ( 0.8f, 1.4f );
         animator.speed = speed;
         lookRotation *= speed;
+
+        return true;
     }
 
-    private void CreateNewPath ()
+    private void RequestNewPathImmediately ()
     {
-        currentPath = new NavMeshPath ();
+        if (IsNavigating) return;
+        if (Citizen.isDead) return;
+        cController.PerformGetPathQueue ( this );
+    }
 
-        Vector3 targetPosition = transform.position + (Random.insideUnitSphere * travelRadius);
-        targetPosition.y = 0;
+    private void RequestNewPath ()
+    {
+        if (IsNavigating) return;
+        if (Citizen.isDead) return;
+        cController.EnqueueGetPath ( this );
+    }
 
-        if (overrideTransform != null)
-            targetPosition = overrideTransform.position;
+    public void DelayedQueuePath(float delay)
+    {
+        if (IsNavigating) return;
+        if (Citizen.isDead) return;
+        Invoke ( nameof ( RequestNewPath ), delay );
+    }
 
-        NavMeshHit hit;
+    public void DelayedQueueMonitor(float delay)
+    {
+        if (!IsNavigating) return;
+        if (Citizen.isDead) return;
+        Invoke ( nameof ( RequestPathToBeMonitored ), delay );
+    }
 
-        if(NavMesh.SamplePosition(targetPosition, out hit, travelRadius, 1 << NavMesh.GetAreaFromName ( "Pavement" ) ))
-        {
-            targetPosition = hit.position;
-        }
-        else
-        {
-            Debug.Log ( "Nahhh" );
-            return;
-        }
+    private void RequestPathToBeMonitored ()
+    {
+        if (!IsNavigating) return;
+        if (Citizen.isDead) return;
+        cController.EnqueueMonitorPath ( this );
+    }
 
-        if (agent.CalculatePath ( targetPosition, currentPath ))
-        {
-            if (currentPath.status == NavMeshPathStatus.PathComplete)
-            {
-                BeginNavigation ();
-            }
-            else
-            {
-                Invoke ( nameof ( CreateNewPath ), Random.Range ( 2.5f, 10.0f ) );
-            }
-        }
-
-        //if (NavMesh.CalculatePath ( transform.position, targetPosition, new NavMeshQueryFilter () { agentTypeID = agent.agentTypeID, areaMask = NavMesh.AllAreas }, currentPath ))
-        //{
-        //    if (currentPath.status == NavMeshPathStatus.PathComplete)
-        //    {
-        //        BeginNavigation ();
-        //    }
-        //    else
-        //    {
-        //        Invoke ( nameof ( CreateNewPath ), Random.Range ( 2.5f, 10.0f ) );
-        //    }
-        //}
+    public void BeginNavigation ()
+    {
+        if (Citizen.isDead) return;
+        IsNavigating = true;
+        PathCornerIndex = 0;
+        PathNodes = currentPath.corners;
+        isRunning = (Random.value > 0.8f) ? true : false;
+        RequestPathToBeMonitored ();
     }
 
     private void Update ()
     {
-        if (agent == null) return;
-        if (overrideTransform != null)
-            CreateNewPath ();
+        if (Citizen.isDead) return;
 
-        UpdateNavigation ();
-    }
+        if (currentForward != ForwardTarget)
+        {
+            currentForward = Mathf.Lerp ( currentForward, ForwardTarget * (isRunning ? 2.0f : 1.0f), forwardDamping * Time.deltaTime );
+            animator.SetFloat ( "forward", currentForward );
+        }
 
-    private void BeginNavigation ()
-    {
-        isNavigating = true;
-        pathCornerIndex = 0;
-        pathNodes = currentPath.corners;
-
-        //NavMeshHit hit;
-
-        //for (int i = 0; i < pathNodes.Length; i++)
-        //{
-        //    Vector3 random = Random.insideUnitSphere * 2.0f;
-        //    random.y = 0;
-        //    pathNodes[i] += random;
-
-        //    if(NavMesh.SamplePosition(pathNodes[i], out hit, 2.0f, NavMesh.AllAreas ))
-        //    {
-        //        pathNodes[i] = hit.position;
-        //    }
-        //}
+        if (IsNavigating)
+        {
+            transform.rotation = Quaternion.Slerp ( transform.rotation, LookDir, Time.deltaTime * lookRotation );
+        }
     }
 
     private void OnDrawGizmosSelected ()
     {
-        if (pathNodes == null) return;
-        for (int i = 0; i < pathNodes.Length - 1; i++)
+        for (int i = 0; i < PathNodes.Length - 1; i++)
         {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine ( pathNodes[i], pathNodes[i + 1] );
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine ( PathNodes[i], PathNodes[i  + 1] );
+            Gizmos.color = Color.blue;
+            Gizmos.DrawLine ( PathNodes[i], PathNodes[i] + Vector3.up * 5.0f );
         }
-    }
-
-    private void UpdateNavigation ()
-    {
-        animator.SetFloat ( "forward", Mathf.Lerp ( animator.GetFloat ( "forward" ), forwardTarget, forwardDamping * Time.deltaTime ) );
-
-        if (!isNavigating) return;
-
-        if (Vector3.Distance ( transform.position, Camera.main.transform.position ) > 100.0f) return;
-
-        if (pathCornerIndex >= pathNodes.Length - 1)
-        {
-            forwardTarget = 0.0f;
-            isNavigating = false;
-
-            Invoke ( nameof ( CreateNewPath ), Random.Range ( 2.5f, 10.0f ) );
-        }
-        else
-        {
-            if (Vector3.Distance ( transform.position, pathNodes[pathCornerIndex + 1] ) < verifyPathIndexDistance)
-            {
-                pathCornerIndex++;
-                return;
-            }
-
-            Vector3 dir = pathNodes[pathCornerIndex + 1] - transform.position;
-            dir.Normalize ();
-            dir.y = 0.0f;
-
-            Quaternion lookDir = Quaternion.LookRotation ( dir );
-            transform.rotation = Quaternion.Slerp ( transform.rotation, lookDir, Time.deltaTime * lookRotation );
-
-            forwardTarget = 0.5f;
-            return;
-        }       
     }
 }

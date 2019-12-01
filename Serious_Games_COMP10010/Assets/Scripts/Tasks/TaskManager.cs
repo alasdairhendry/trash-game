@@ -41,6 +41,7 @@ public class TaskManager : MonoBehaviour
         CreateTasks ();
         AssignInitialTask ();
         truckAreaCollider.OnAreaChanged += OnTruckAreaChanged;
+        InvokeRepeating ( nameof ( CheckAreaNavigation ), 0.25f, 0.25f );
     }
 
     private void Update ()
@@ -49,11 +50,6 @@ public class TaskManager : MonoBehaviour
         UpdateActiveTask ();
 
         fillImage.fillAmount = Mathf.Lerp ( fillImage.fillAmount, fillImageTarget, fillImageDamp * Time.deltaTime );        
-    }
-
-    private void LateUpdate ()
-    {
-        CheckAreaNavigation ();
     }
 
     private void CreateTasks ()
@@ -81,6 +77,12 @@ public class TaskManager : MonoBehaviour
                 tasks.RemoveAt ( 0 );
                 tasks.Add ( previousTask );
             }
+        }
+        else
+        {
+            Task task = tasks.FirstOrDefault ( x => x.taskName == "Collect 5 trash" );
+            tasks.Remove ( task );
+            tasks.Insert ( 0, task );
         }
 
         AssignTask ( tasks[0] );
@@ -133,7 +135,7 @@ public class TaskManager : MonoBehaviour
 
             if (currentTime <= 0.0f)
             {
-                Debug.LogError ( "You have ran out of time" );
+                //Debug.LogError ( "You have ran out of time" );
             }
         }
     }

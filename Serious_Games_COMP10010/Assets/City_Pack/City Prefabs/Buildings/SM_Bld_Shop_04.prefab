@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 3345828}
   - component: {fileID: 2311506}
   - component: {fileID: 3077179023247795905}
+  - component: {fileID: 7433749108829791585}
   m_Layer: 0
   m_Name: SM_Bld_Shop_04
   m_TagString: Untagged
@@ -171,3 +172,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5.1059875, y: 3.17025, z: 5.885511}
   m_Center: {x: -2.5, y: 1.585125, z: -2.1158888}
+--- !u!208 &7433749108829791585
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195682}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2.5530002, y: 1.585, z: 2.943}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -2.5, y: 1.585, z: -2.1160002}
+  m_TimeToStationary: 0.5

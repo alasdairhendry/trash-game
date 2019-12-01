@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3373738}
   - component: {fileID: 2322114}
   - component: {fileID: 8576706061831938437}
+  - component: {fileID: 6658110175649635561}
   m_Layer: 0
   m_Name: SM_Bld_Apartment_Corner_03
   m_TagString: Untagged
@@ -92,3 +93,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5.491493, y: 2.999998, z: 5.4972506}
   m_Center: {x: -2.4759865, y: 1.499999, z: -2.4755325}
+--- !u!208 &6658110175649635561
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189184}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2.746, y: 1.5000001, z: 2.749}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -2.476, y: 1.5000001, z: -2.476}
+  m_TimeToStationary: 0.5

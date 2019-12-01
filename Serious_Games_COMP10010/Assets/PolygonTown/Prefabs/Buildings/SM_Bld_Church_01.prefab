@@ -246,6 +246,7 @@ GameObject:
   - component: {fileID: 33803676830709314}
   - component: {fileID: 23398101980761912}
   - component: {fileID: 2867699953733806453}
+  - component: {fileID: 5669297150450491089}
   m_Layer: 0
   m_Name: SM_Bld_Church_01
   m_TagString: Untagged
@@ -330,3 +331,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 9904406e34eee1b4292b52dd0ec6028a, type: 3}
+--- !u!208 &5669297150450491089
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627588572608906}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 5.1860003, y: 8.261001, z: 7.1940002}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 7.9620004, z: 0.37100002}
+  m_TimeToStationary: 0.5

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3314380}
   - component: {fileID: 2395636}
   - component: {fileID: -4651743906676596615}
+  - component: {fileID: -1171528232871338863}
   m_Layer: 0
   m_Name: SM_Bld_Station_02
   m_TagString: Untagged
@@ -92,3 +93,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 8.771561, y: 8.584473, z: 9.370911}
   m_Center: {x: 0.0000076293945, y: 4.2922363, z: 0.29968262}
+--- !u!208 &-1171528232871338863
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154410}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 4.386, y: 4.2920003, z: 4.6850004}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 4.2920003, z: 0.3}
+  m_TimeToStationary: 0.5

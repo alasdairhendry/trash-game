@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3319394}
   - component: {fileID: 2389492}
   - component: {fileID: -1077955923811652513}
+  - component: {fileID: 451762808994768529}
   m_Layer: 0
   m_Name: SM_Bld_Apartment_Door_Corner_02
   m_TagString: Untagged
@@ -92,3 +93,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5.1153336, y: 3, z: 5.11533}
   m_Center: {x: -2.4995232, y: 1.5, z: -2.499523}
+--- !u!208 &451762808994768529
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 139296}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2.558, y: 1.5000001, z: 2.558}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -2.5, y: 1.5000001, z: -2.5}
+  m_TimeToStationary: 0.5

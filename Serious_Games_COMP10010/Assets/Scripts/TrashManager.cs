@@ -127,7 +127,7 @@ public class TrashManager : MonoBehaviour
     {
         GameObject go = Instantiate ( collectableAddedTextPrefab );
         go.GetComponentInChildren<TextMeshProUGUI> ().text = "+" + amount.ToString ( "0" );
-        go.transform.parent = transform;
+        go.transform.SetParent ( transform );
         go.transform.localPosition = Vector3.zero;
         go.transform.localRotation = Quaternion.identity;
         go.transform.localScale = Vector3.one;

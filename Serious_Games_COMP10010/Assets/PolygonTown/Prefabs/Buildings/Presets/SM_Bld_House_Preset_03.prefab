@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33115728245276628}
   - component: {fileID: 23893400022861088}
   - component: {fileID: 1805346327188781263}
+  - component: {fileID: -1355413766360603754}
   m_Layer: 0
   m_Name: SM_Bld_House_Preset_03
   m_TagString: Untagged
@@ -95,3 +96,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 4300000, guid: 8e1d7d80ecec9664fa42b9ee32fa1ff5, type: 3}
+--- !u!208 &-1355413766360603754
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1933834177033934}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 6.9360003, y: 3.229, z: 6.9360003}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 3.13, z: 0}
+  m_TimeToStationary: 0.5

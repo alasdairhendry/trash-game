@@ -8,13 +8,11 @@ public class VisibilityCallbacks : MonoBehaviour
 
     private void OnBecameVisible ()
     {
-        Debug.Log ( "Visible" );
-        citizen.IsCulled = false;
+        citizen.SetIsCulled ( false );
     }
 
     private void OnBecameInvisible ()
     {
-        Debug.Log ( "Invisible" );
-        citizen.IsCulled = true;
+        citizen.SetIsCulled ( true );
     }
 }

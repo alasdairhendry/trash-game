@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3375006}
   - component: {fileID: 2314070}
   - component: {fileID: -3040929707848531780}
+  - component: {fileID: 2765649766340584752}
   m_Layer: 0
   m_Name: SM_Bld_Apartment_Door_01
   m_TagString: Untagged
@@ -92,3 +93,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 5.096344, y: 2.999999, z: 5.5768414}
   m_Center: {x: -2.5, y: 1.4999995, z: -2.259253}
+--- !u!208 &2765649766340584752
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169392}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 2.548, y: 1.5000001, z: 2.788}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -2.5, y: 1.5000001, z: -2.259}
+  m_TimeToStationary: 0.5

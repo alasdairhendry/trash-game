@@ -55,8 +55,6 @@ public class GarbageTruck : MonoBehaviour
         CheckCamera ();
         CheckSpeed ();
         CheckAir ();
-
-        speedText.text = (car.GetNormalisedSpeed * 120).ToString ( "0" ) + "mph";
     }
 
     private void CheckAir ()
