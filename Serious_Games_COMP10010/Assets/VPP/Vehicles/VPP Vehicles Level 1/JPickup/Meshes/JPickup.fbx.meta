@@ -2932,6 +2932,7 @@ ModelImporter:
     lODScreenPercentages:
     - 0.25
     - 0.01
+    - 0.01
     globalScale: 1
     meshCompression: 0
     addColliders: 0
