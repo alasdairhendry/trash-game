@@ -34,6 +34,7 @@ public class GarbageTruck : MonoBehaviour
     public bool IsDrifting { get; protected set; }
 
     public System.Action<GameObject> OnDestroyProp;
+    [SerializeField] private Vector3 respawnPosition = new Vector3 ();
 
     private void Awake ()
     {
@@ -47,14 +48,37 @@ public class GarbageTruck : MonoBehaviour
         public TrailRenderer trail;
     }
 
+
+    [SerializeField] private float timePerLevel = 600.0f;
+    [SerializeField] private TextMeshProUGUI timeLeft;
+
     private void Update ()
     {
+        if(timePerLevel > 0)
+        timePerLevel -= Time.deltaTime;
+        float mins = timePerLevel / 60.0f;
+        mins--;
+        float secs = timePerLevel % 60.0f;
+        timeLeft.text = mins.ToString ( "00" ) + ":" + secs.ToString ( "00" );
+
+        if(timePerLevel < 0.0f)
+        {
+            ShowEndScreen ();
+            timePerLevel = 0;
+        }
+
+
         SetDirections ();
         CheckInput ();
         CheckDrifting ();
         CheckCamera ();
         CheckSpeed ();
         CheckAir ();
+    }
+
+    private void ShowEndScreen ()
+    {
+
     }
 
     private void CheckAir ()
@@ -193,6 +217,18 @@ public class GarbageTruck : MonoBehaviour
         {
             OnDestroyProp?.Invoke (other.gameObject);
         }
+        else if (other.CompareTag ( "Water" ))
+        {
+            Invoke ( nameof ( Respawn ), 1.0f );
+        }
+    }
+
+    public void Respawn ()
+    {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        transform.position = respawnPosition;
+        transform.eulerAngles = new Vector3 ( 0.0f, 90.0f, 0.0f );
     }
 
     private void OnDrawGizmos ()

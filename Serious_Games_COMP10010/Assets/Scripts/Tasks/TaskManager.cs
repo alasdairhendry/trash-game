@@ -94,6 +94,7 @@ public class TaskManager : MonoBehaviour
     public void AddTime ()
     {
         currentTime = activeTask.timeAllowed / 2.0f;
+        PopupCanvas.instance.DisplayGreen ( (activeTask.timeAllowed / 2.0f).ToString () + " seconds added" );
     }
 
     private void AssignInitialTask (Task previousTask = null)
@@ -200,7 +201,7 @@ public class TaskManager : MonoBehaviour
             AssignInitialTask ( task );
         }
 
-        Debug.Log ( "Task complete" );
+        PopupCanvas.instance.DisplayGreen ( "Task Complete" );
     }
 
     public void FailTask ()
@@ -220,6 +221,8 @@ public class TaskManager : MonoBehaviour
             AssignInitialTask ( task );
         }
 
+
+        PopupCanvas.instance.DisplayRed ( "Task Failed" );
         Debug.Log ( "Task failed" );
     }
 

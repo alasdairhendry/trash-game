@@ -15,6 +15,8 @@ public class QuestionCanvas : MonoBehaviour
     [SerializeField] private TextMeshProUGUI headerText;
     [SerializeField] private TextMeshProUGUI questionText;
     [SerializeField] private TextMeshProUGUI infoText;
+    [SerializeField] private TextMeshProUGUI percentageDisplayText;
+    [SerializeField] private TextMeshProUGUI percentageText;
     [SerializeField] private GameObject statusCorrectText;
     [SerializeField] private GameObject statusIncorrectText;
     [SerializeField] private GameObject bodyPanel;
@@ -63,16 +65,28 @@ public class QuestionCanvas : MonoBehaviour
 
         Question question = questions[questionIndex];
 
-        string header = "Final Attempt This Task!";
+        string header = "";
+
+        if (isRetryQuestion)
+            header += "Final Attempt This Task!";
+        else
+            header += "You have run out of time!";
+
         header += "\n";
-        header += "<size=50%>Answer the question <size=65%>CORRECTLY</size> to gain ";
+
+        if (isRetryQuestion)
+            header += "<size=50%>Answer the question <size=65%>CORRECTLY</size> to gain ";
+        else
+            header += "<size=50%>Answer the question to gain ";
+
+
         header += (TaskManager.instance.activeTask.timeAllowed / 2.0f).ToString ();
         header += " seconds </size>";
         headerText.text = header;
 
         questionText.text = "Q. " + question.question;
         continueButton.onClick.RemoveAllListeners ();
-        continueButton.onClick.AddListener ( () => { TaskManager.instance.AddTime (); HidePanel (); } );
+        continueButton.onClick.AddListener ( () => { HidePanel (); } );
 
         List<string> possibleAnswers = new List<string> ()
         {
@@ -113,9 +127,15 @@ public class QuestionCanvas : MonoBehaviour
         SetInfoText ( "Correct" );
         statusCorrectText.SetActive ( true );
         statusIncorrectText.SetActive ( false );
-        questions[questionIndex].AddAnswer ( new Answer ( true, DateTime.UtcNow, questions[questionIndex].answers.Count, Time.time ) );
+        //questions[questionIndex].AddAnswer ( new Answer ( true, DateTime.UtcNow, questions[questionIndex].answers.Count, Time.time ) );
         MultiplierManager.instance.IncreaseMultiplier ();
+
         isRetryQuestion = false;
+        TaskManager.instance.AddTime ();
+        correctAnswers++;
+        answerAttempts++;
+        percentageDisplayText.text = "Question Statistics";
+        percentageText.text = correctAnswers.ToString () + "/" + answerAttempts.ToString () + " correct (" + (((float)correctAnswers / (float)answerAttempts) * 100.0f).ToString ( "0" ) + "%)";
     }
 
     private void OnWrongAnswerChosen ()
@@ -123,7 +143,7 @@ public class QuestionCanvas : MonoBehaviour
         SetInfoText ( "Incorrect" );
         statusIncorrectText.SetActive ( true );
         statusCorrectText.SetActive ( false );
-        questions[questionIndex].AddAnswer ( new Answer ( false, DateTime.UtcNow, questions[questionIndex].answers.Count, Time.time ) );
+        //questions[questionIndex].AddAnswer ( new Answer ( false, DateTime.UtcNow, questions[questionIndex].answers.Count, Time.time ) );
         MultiplierManager.instance.DecreaseMultiplier ();
 
         if(isRetryQuestion)
@@ -136,8 +156,16 @@ public class QuestionCanvas : MonoBehaviour
         {
             // Player failed first attempt
             isRetryQuestion = true;
+            TaskManager.instance.AddTime ();
         }
+
+        answerAttempts++;
+        percentageDisplayText.text = "Question Statistics";
+        percentageText.text = correctAnswers.ToString () + "/" + answerAttempts.ToString () + " correct (" + (((float)correctAnswers / (float)answerAttempts) * 100.0f).ToString ( "0" ) + "%)";
     }
+
+    private int correctAnswers = 0;
+    private int answerAttempts = 0;
 
     public void HidePanel ()
     {
