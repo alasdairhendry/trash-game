@@ -10,6 +10,19 @@ using UnityEngine.UI.Extensions;
 
 public class TaskManager : MonoBehaviour
 {
+    public static TaskManager instance;
+
+    private void Awake ()
+    {
+        if (instance == null)
+            instance = this;
+        else if (instance != this)
+        {
+            Destroy ( this.gameObject );
+            return;
+        }
+    }
+
     public Task activeTask { get; protected set; }
 
     public List<Task> tasks { get; protected set; } = new List<Task> ();
@@ -35,6 +48,7 @@ public class TaskManager : MonoBehaviour
 
     private void Start ()
     {
+        TickSystem.Tick += Tick;
         path = new NavMeshPath ();
         mm = FindObjectOfType<MiniMap> ();
 
@@ -52,6 +66,17 @@ public class TaskManager : MonoBehaviour
         fillImage.fillAmount = Mathf.Lerp ( fillImage.fillAmount, fillImageTarget, fillImageDamp * Time.deltaTime );        
     }
 
+    private void Tick()
+    {
+        if (TickSystem.Equals ( 10 ))
+        {
+            if (activeTask != null && activeTask.isActive)
+            {
+                timeLeftText.text = currentTime.ToString ( "0" ) + " secs\nleft";
+            }
+        }
+    }
+
     private void CreateTasks ()
     {
         tasks.Add ( new Task01 () );
@@ -64,6 +89,11 @@ public class TaskManager : MonoBehaviour
         tasks.Add ( new Task08 () );
         tasks.Add ( new Task09 () );
         tasks.Add ( new Task10 () );
+    }
+
+    public void AddTime ()
+    {
+        currentTime = activeTask.timeAllowed / 2.0f;
     }
 
     private void AssignInitialTask (Task previousTask = null)
@@ -126,17 +156,17 @@ public class TaskManager : MonoBehaviour
 
     private void MonitorTime ()
     {
-        if (activeTask != null && activeTask.isActive)
+        if (activeTask != null && activeTask.isActive && currentTime > 0)
         {
             currentTime -= Time.deltaTime;
-            if (currentTime < 0.0f) currentTime = 0.0f;
+
+            if (currentTime < 0.0f)
+            {
+                QuestionCanvas.instance.ShowQuestion ();
+                currentTime = 0.0f;
+            }
 
             timeLeftText.text = currentTime.ToString ( "0" ) + " secs\nleft";
-
-            if (currentTime <= 0.0f)
-            {
-                //Debug.LogError ( "You have ran out of time" );
-            }
         }
     }
 
@@ -169,6 +199,28 @@ public class TaskManager : MonoBehaviour
         {
             AssignInitialTask ( task );
         }
+
+        Debug.Log ( "Task complete" );
+    }
+
+    public void FailTask ()
+    {
+        if (activeTask == null) return;
+
+        Task task = activeTask;
+        activeTask.OnTaskUpdated -= OnTaskUpdated;
+        activeTask.OnTaskComplete -= OnTaskComplete;
+
+        if (tasks.IndexOf ( task ) < tasks.Count - 1)
+        {
+            AssignTask ( tasks[tasks.IndexOf ( task ) + 1] );
+        }
+        else
+        {
+            AssignInitialTask ( task );
+        }
+
+        Debug.Log ( "Task failed" );
     }
 
     public List<T> Shuffle<T> (List<T> list)

@@ -10,18 +10,12 @@ public class DestructableEnvironmentProp : MonoBehaviour
     [SerializeField] private Vector3 localPosition;
     [SerializeField] private bool disableCollisions = false;
 
-    private bool isDestroyed = false;
+    public bool isActivated { get; protected set; } = false;
 
     private void OnDrawGizmosSelected ()
     {
         Gizmos.DrawCube ( transform.TransformPoint ( localPosition ), Vector3.one * 0.2f );
     }
-
-    //private void OnCollisionEnter (Collision collision)
-    //{
-    //    if (collision.collider.CompareTag ( "truck" ))
-    //        DestroyProp ( collision.collider );
-    //}
 
     private void OnTriggerEnter (Collider other)
     {
@@ -31,8 +25,8 @@ public class DestructableEnvironmentProp : MonoBehaviour
 
     private void DestroyProp (Collider other)
     {
-        if (isDestroyed) return;
-        isDestroyed = true;
+        if (isActivated) return;
+        isActivated = true;
 
         MultiplierManager.instance.AddProgress ( 2.0f, "Destruction" );
 
@@ -59,13 +53,8 @@ public class DestructableEnvironmentProp : MonoBehaviour
 
         Rigidbody rb = GetComponent<Rigidbody> ();
 
-        if (rb == null)
-        {
-            gameObject.AddComponent<Rigidbody> ();
-        }
-
-        if (disableCollisions)
-            Physics.IgnoreCollision ( other, GetComponent<Collider> () );
+        if (rb == null) gameObject.AddComponent<Rigidbody> ();
+        if (disableCollisions) Physics.IgnoreCollision ( other, GetComponent<Collider> () );
     }
 
     private void Vanish ()

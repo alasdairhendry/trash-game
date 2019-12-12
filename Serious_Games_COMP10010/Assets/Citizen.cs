@@ -77,19 +77,38 @@ public class Citizen : MonoBehaviour
     {
         if (other.CompareTag ( "truck" ))
         {
-            isDead = true;
-            cCon.OnDeath ( this );
+            Die ( other );
+        }
+        else
+        {
+            DestructableEnvironmentProp dep = other.GetComponent<DestructableEnvironmentProp> ();
 
-            GetComponent<Collider> ().enabled = false;
-            anim.enabled = false;
-            cRag.Die ( citizenType, activeGraphic );
-
-            Rigidbody rb = GetComponentInChildren<Rigidbody> ();
-
-            if (rb)
+            if (dep != null)
             {
-                rb.AddForce ( (transform.position-  other.transform.position ).normalized * 256.0f, ForceMode.Impulse );
+                if (dep.isActivated)
+                {
+                    Die ( other );
+                }
             }
+        }
+    }
+
+
+    private void Die (Collider other)
+    {
+        if (isDead) return;
+        isDead = true;
+        cCon.OnDeath ( this );
+
+        GetComponent<Collider> ().enabled = false;
+        anim.enabled = false;
+        cRag.Die ( citizenType, activeGraphic );
+
+        Rigidbody rb = GetComponentInChildren<Rigidbody> ();
+
+        if (rb)
+        {
+            rb.AddForce ( (transform.position - other.transform.position).normalized * 256.0f, ForceMode.Impulse );
         }
     }
 

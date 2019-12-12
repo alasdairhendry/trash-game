@@ -3,7 +3,152 @@ guid: c40d097bee83512419b9a6f5ec56f5dc
 ModelImporter:
   serializedVersion: 26
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: acb4d0e726e2a0442bad8407fe07289f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: No Name
+    second: {fileID: 2100000, guid: 4eda25a1a59376140adc1ee507632895, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: beam_frame
+    second: {fileID: 2100000, guid: 20c672be85328704ab74cf75e55810a7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: beam_light
+    second: {fileID: 2100000, guid: cf521514db97ae64d8361bcc1b3a1ae0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: beam_light_case
+    second: {fileID: 2100000, guid: 4ff5a459041c4294e841004ac665d0a0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cab_bumper
+    second: {fileID: 2100000, guid: 82c2c22ff1579924a8f2836c62c8eec9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cab_couch
+    second: {fileID: 2100000, guid: cbe7876b53bf01b4fa1fd837b6027ad5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cab_couch_box
+    second: {fileID: 2100000, guid: 2cec968fd86fd2f46928c9d2d7065ff6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cab_door
+    second: {fileID: 2100000, guid: 53adc1d7f8c8c9943a377cda198c5fcf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cab_door_handle
+    second: {fileID: 2100000, guid: 99bc24c0dedf4184fb7bc491011027d6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cab_door_handle_2
+    second: {fileID: 2100000, guid: 00791db4eda99ce4ca1d2794e5a7ed0c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cab_pedals
+    second: {fileID: 2100000, guid: a966738c2b6326443b39138a0aaa85d9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cab_step
+    second: {fileID: 2100000, guid: 8b10a263b61a9cb4b9aaada94e972b73, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: compactor_body
+    second: {fileID: 2100000, guid: 018afe017989d864894312e6cafd9e11, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: compactor_body_dark
+    second: {fileID: 2100000, guid: c45cbcef457b3c84f9a7b7c9755d9025, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: compactor_body_trim
+    second: {fileID: 2100000, guid: 0fea2fa220366154e8177d3212d02e71, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: gearstick_bend
+    second: {fileID: 2100000, guid: 3bfe6673d3bee534a9ebf5e10968f65c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: gearstick_box
+    second: {fileID: 2100000, guid: 03a1de9d71cdf6f4d93164d30c85a15e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: gearstick_knob
+    second: {fileID: 2100000, guid: 02bef942aac491345b85a7dc5f2a5b86, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: gearstick_pole
+    second: {fileID: 2100000, guid: 75ee4d9e9ea543248bb44966a0864538, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: glass
+    second: {fileID: 2100000, guid: 46435965eb3ac9e4499cdec9c102a139, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: headlight
+    second: {fileID: 2100000, guid: 0809e72a3df6a4c4f98b04496c9c2328, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ladder
+    second: {fileID: 2100000, guid: 86ed579b41d86734cac1b4cbb074344a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: steering_wheel_leather
+    second: {fileID: 2100000, guid: 69661eb1ca9ea6843a378ec50c1fd18f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: steering_wheel_metal
+    second: {fileID: 2100000, guid: 8c088e0f908725e43ab483d98f0b1ca8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: steering_wheel_plastic
+    second: {fileID: 2100000, guid: 11c5f09ae1dd2044e884b24ff32cc6bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: steering_wheel_rims
+    second: {fileID: 2100000, guid: 5b9db77420d492f44912c71445cc9b1d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wheel_black
+    second: {fileID: 2100000, guid: 79cfdd3a25bd2374f804594ae92f83f4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wheel_trim
+    second: {fileID: 2100000, guid: 60c78429d1758404b9ec0812724d0203, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

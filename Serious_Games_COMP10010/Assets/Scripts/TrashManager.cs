@@ -42,39 +42,47 @@ public class TrashManager : MonoBehaviour
             Destroy ( this.gameObject );
             return;
         }
+
+        TickSystem.Tick += Tick;
+    }
+
+    private void Tick ()
+    {
+        if (TickSystem.Equals ( 4 ))
+        {
+            if (plasticText.text != plasticCollectedTextTarget.ToString ())
+                plasticText.text = plasticCollectedTextTarget.ToString ( "0" );
+
+            if (paperText.text != paperCollectedTextTarget.ToString ())
+                paperText.text = paperCollectedTextTarget.ToString ( "0" );
+
+            if (glassText.text != glassCollectedTextTarget.ToString ())
+                glassText.text = glassCollectedTextTarget.ToString ( "0" );
+
+            if (foodText.text != foodCollectedTextTarget.ToString ())
+                foodText.text = foodCollectedTextTarget.ToString ( "0" );
+
+            if (metalText.text != metalCollectedTextTarget.ToString ())
+                metalText.text = metalCollectedTextTarget.ToString ( "0" );
+        }
     }
 
     private void Update ()
     {
         if (plasticCollectedTextTarget != plasticCollected)
-        {
             plasticCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)plasticCollectedTextTarget, (float)plasticCollected, Time.deltaTime * uiDamp ) );
-            plasticText.text = plasticCollectedTextTarget.ToString ( "0" );
-        }
 
         if (paperCollectedTextTarget != paperCollected)
-        {
             paperCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)paperCollectedTextTarget, (float)paperCollected, Time.deltaTime * uiDamp ) );
-            paperText.text = paperCollectedTextTarget.ToString ( "0" );
-        }
 
         if (glassCollectedTextTarget != glassCollected)
-        {
             glassCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)glassCollectedTextTarget, (float)glassCollected, Time.deltaTime * uiDamp ) );
-            glassText.text = glassCollectedTextTarget.ToString ( "0" );
-        }
 
         if (foodCollectedTextTarget != foodCollected)
-        {
             foodCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)foodCollectedTextTarget, (float)foodCollected, Time.deltaTime * uiDamp ) );
-            foodText.text = foodCollectedTextTarget.ToString ( "0" );
-        }
 
         if (metalCollectedTextTarget != metalCollected)
-        {
             metalCollectedTextTarget = Mathf.CeilToInt ( Mathf.Lerp ( (float)metalCollectedTextTarget, (float)metalCollected, Time.deltaTime * uiDamp ) );
-            metalText.text = metalCollectedTextTarget.ToString ( "0" );
-        }
     }
 
     int[] toAdd = new int[5];

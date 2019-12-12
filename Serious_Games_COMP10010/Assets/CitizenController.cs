@@ -111,34 +111,34 @@ public class CitizenController : MonoBehaviour
         }
     }
 
-    public void PerformGetPathQueue(CitizenNavigation cNav)
+    public void PerformGetPathQueue(CitizenNavigation citizenNavigation)
     {
-        if (cNav.IsNavigating) return;
+        if (citizenNavigation.IsNavigating) return;
 
-        getPathQueueTargetPosition = cNav.transform.position + (Random.insideUnitSphere * cNav.TravelRadius);
+        getPathQueueTargetPosition = citizenNavigation.transform.position + (Random.insideUnitSphere * citizenNavigation.TravelRadius);
         getPathQueueTargetPosition.y = 0;
 
-        if (NavMesh.SamplePosition ( getPathQueueTargetPosition, out hit, cNav.TravelRadius, 1 << NavMesh.GetAreaFromName ( "Pavement" ) ))
+        if (NavMesh.SamplePosition ( getPathQueueTargetPosition, out hit, citizenNavigation.TravelRadius, 1 << NavMesh.GetAreaFromName ( "Pavement" ) ))
         {
             getPathQueueTargetPosition = hit.position;
         }
         else
         {
-            if (!cNav.Citizen.isDead)
-                EnqueueGetPath ( cNav );
+            if (!citizenNavigation.Citizen.isDead)
+                EnqueueGetPath ( citizenNavigation );
             return;
         }
 
-        if (cNav.Agent.CalculatePath ( getPathQueueTargetPosition, cNav.currentPath ))
+        if (citizenNavigation.Agent.CalculatePath ( getPathQueueTargetPosition, citizenNavigation.currentPath ))
         {
-            if (cNav.currentPath.status == NavMeshPathStatus.PathComplete || cNav.currentPath.status == NavMeshPathStatus.PathPartial)
+            if (citizenNavigation.currentPath.status == NavMeshPathStatus.PathComplete || citizenNavigation.currentPath.status == NavMeshPathStatus.PathPartial)
             {
-                cNav.BeginNavigation ();
+                citizenNavigation.BeginNavigation ();
             }
             else
             {
-                if (!cNav.Citizen.isDead)
-                    EnqueueGetPath ( cNav );
+                if (!citizenNavigation.Citizen.isDead)
+                    EnqueueGetPath ( citizenNavigation );
             }
         }
     }

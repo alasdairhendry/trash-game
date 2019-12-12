@@ -85,7 +85,7 @@ public class Task01 : TaskInt
     {
         base.taskName = "Collect 5 trash";
         base.requiredArea = "";
-        base.timeAllowed = 60.0f;
+        base.timeAllowed = 30.0f;
         base.currentProgress = 0;
         base.targetProgress = 5;
         base.isActive = false;
@@ -120,7 +120,7 @@ public class Task02 : TaskInt
     {
         base.taskName = "Collect 5 trash at Ocean Terrace";
         base.requiredArea = "Ocean Terrace";
-        base.timeAllowed = 60.0f;
+        base.timeAllowed = 45.0f;
         base.currentProgress = 0;
         base.targetProgress = 5;
         base.isActive = false;
@@ -157,7 +157,7 @@ public class Task03 : TaskInt
     {
         base.taskName = "Collect 5 trash at The Outskirts";
         base.requiredArea = "The Outskirts";
-        base.timeAllowed = 60.0f;
+        base.timeAllowed = 45.0f;
         base.currentProgress = 0;
         base.targetProgress = 5;
         base.isActive = false;
@@ -194,7 +194,7 @@ public class Task04 : TaskInt
     {
         base.taskName = "Collect 5 trash at City Hall";
         base.requiredArea = "City Hall";
-        base.timeAllowed = 60.0f;
+        base.timeAllowed = 45.0f;
         base.currentProgress = 0;
         base.targetProgress = 5;
         base.isActive = false;
@@ -231,7 +231,7 @@ public class Task05 : TaskInt
     {
         base.taskName = "Collect 5 trash at The Suburbs";
         base.requiredArea = "The Suburbs";
-        base.timeAllowed = 60.0f;
+        base.timeAllowed = 45.0f;
         base.currentProgress = 0;
         base.targetProgress = 5;
         base.isActive = false;
@@ -268,7 +268,7 @@ public class Task06 : TaskInt
     {
         base.taskName = "Collect 5 trash at The Offices";
         base.requiredArea = "The Offices";
-        base.timeAllowed = 60.0f;
+        base.timeAllowed = 45.0f;
         base.currentProgress = 0;
         base.targetProgress = 5;
         base.isActive = false;
@@ -307,7 +307,7 @@ public class Task07 : TaskFloat
     {
         base.taskName = "Hold a 5x multiplier for 15 seconds";
         base.requiredArea = "";
-        base.timeAllowed = 60.0f;
+        base.timeAllowed = 45.0f;
         base.currentProgress = 0;
         base.targetProgress = 15;
         base.isActive = false;
@@ -368,7 +368,7 @@ public class Task08 : TaskFloat
     {
         base.taskName = "Travel 1000m";
         base.requiredArea = "";
-        base.timeAllowed = 60.0f;
+        base.timeAllowed = 45.0f;
         base.currentProgress = 0;
         base.targetProgress = 1000;
         base.isActive = false;
@@ -415,7 +415,7 @@ public class Task09 : TaskInt
     {
         base.taskName = "Smash into 100 objects";
         base.requiredArea = "";
-        base.timeAllowed = 60.0f;
+        base.timeAllowed = 30.0f;
         base.currentProgress = 0;
         base.targetProgress = 100;
         base.isActive = false;
@@ -453,7 +453,7 @@ public class Task10 : TaskFloat
     {
         base.taskName = "Drift for 100m";
         base.requiredArea = "";
-        base.timeAllowed = 60.0f;
+        base.timeAllowed = 45.0f;
         base.currentProgress = 0;
         base.targetProgress = 100;
         base.isActive = false;

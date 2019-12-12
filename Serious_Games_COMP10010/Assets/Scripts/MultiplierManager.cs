@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -13,7 +14,6 @@ public class MultiplierManager : MonoBehaviour
     [SerializeField] private List<Image> fillImages;
     [SerializeField] private float fillAmountTarget;
     [SerializeField] private float fillAmountDamp = 2.5f;
-    [SerializeField] private float timePerMultiplier = 5.0f;
     [SerializeField] private float timeCounter = 0.0f;
     [Space]
     [SerializeField] private float currentSegmentProgress = 0;
@@ -36,7 +36,7 @@ public class MultiplierManager : MonoBehaviour
 
     public System.Action<int> OnMultiplierChanged;
 
-    public int GetCurrentMultiplier
+   [NaughtyAttributes.ShowNativeProperty]  public int GetCurrentMultiplier
     {
         get
         {
@@ -90,7 +90,7 @@ public class MultiplierManager : MonoBehaviour
                 }
             }
 
-            int randIndex = Random.Range ( 0, transformsFound.Count );
+            int randIndex = UnityEngine.Random.Range ( 0, transformsFound.Count );
             lastUsedMultiplierPositionIndex = multiplierPositions.IndexOf ( transformsFound[randIndex] );
             return transformsFound[randIndex];
         }
@@ -102,58 +102,13 @@ public class MultiplierManager : MonoBehaviour
     {
         MonitorTime ();
         CheckCurrentSegment ();
-
-        if (currentSegmentIndex >= 0)
-        {
-            float fillX = multipliers[currentSegmentIndex].fillExtents.x;
-            float fillY = multipliers[currentSegmentIndex].fillExtents.y;
-
-            if (currentSegmentIndex != multipliers.Count - 1)
-                multiplierFillTarget = Mathf.Lerp ( 0, highestFill, Mathf.InverseLerp ( multipliers[currentSegmentIndex].progressRequired, multipliers[currentSegmentIndex + 1].progressRequired, currentSegmentProgress ) );
-            else
-
-                multiplierFillTarget = 1.0f;
-        }
-        else
-        {
-            multiplierFillTarget = 0.0f;
-        }
-
-        multiplierFillImage.fillAmount = Mathf.Lerp ( multiplierFillImage.fillAmount, multiplierFillTarget, Time.deltaTime * fillAmountDamp );
-
-        //for (int i = 0; i < fillImages.Count; i++)
-        //{
-        //    fillImages[i].fillAmount = Mathf.Lerp ( fillImages[i].fillAmount, fillAmountTarget, Time.deltaTime * fillAmountDamp );
-        //}
-
-        //if (currentSegmentIndex >= 0)
-        //{
-        //    float fillX = multipliers[currentSegmentIndex].fillExtents.x;
-        //    float fillY = multipliers[currentSegmentIndex].fillExtents.y;
-
-        //    if (currentSegmentIndex != multipliers.Count - 1)
-        //        fillAmountTarget = Mathf.Lerp ( fillX, fillY, Mathf.InverseLerp ( multipliers[currentSegmentIndex].progressRequired, multipliers[currentSegmentIndex + 1].progressRequired, currentSegmentProgress ) );
-        //    else
-        //        fillAmountTarget = 1.0f;
-        //}
-        //else
-        //{
-        //    fillAmountTarget = 0.0f;
-        //}
-
-        //for (int i = 0; i < fillImages.Count; i++)
-        //{
-        //    fillImages[i].fillAmount = Mathf.Lerp ( fillImages[i].fillAmount, fillAmountTarget, Time.deltaTime * fillAmountDamp );
-        //}
+        UpdateFillUI ();       
     }
 
     public void AddProgress (float amount, string reason)
     {
         currentSegmentProgress += amount;
-        currentSegmentProgress = Mathf.Clamp ( currentSegmentProgress, 0.0f, multipliers[multipliers.Count - 1].progressRequired  + 1);
-
-        if (currentSegmentIndex >= 0)
-            timeCounter = timePerMultiplier;
+        currentSegmentProgress = Mathf.Clamp ( currentSegmentProgress, 0.0f, multipliers[multipliers.Count - 1].scoreRequiredForMultiplier  + 1);
 
         Transform t = GetEmptyMultiplierPosition (reason);
         if (t == null) return;
@@ -171,6 +126,7 @@ public class MultiplierManager : MonoBehaviour
         s += "\n";
         s += "<size=85%>" + reason + "</size>";
         go.GetComponent<TextMeshProUGUI> ().text = s;
+        CheckCurrentSegment ();
     }
 
     private void MonitorTime ()
@@ -179,68 +135,71 @@ public class MultiplierManager : MonoBehaviour
         {
             timeCounter -= Time.deltaTime;
 
-            if (timeCounter < 0)
+            if (timeCounter <= 0)
             {
-                if (currentSegmentIndex > 0)
-                    currentSegmentProgress = multipliers[currentSegmentIndex - 1].progressRequired;
-                else currentSegmentProgress = 0;
-
-                if (currentSegmentIndex >= 0)
-                    timeCounter = timePerMultiplier;
+                if (currentSegmentIndex == multipliers.Count)
+                {
+                    FinishMultiplier ();
+                }
+                else
+                {
+                    DecreaseMultiplier ();
+                }
             }
-        }
-
-        timeFillTarget = Mathf.Lerp ( 0, highestFill, Mathf.InverseLerp ( 0.0f, timePerMultiplier, timeCounter ) );
-
-        if (timeFillImage.fillAmount < timeFillTarget)
-            timeFillImage.fillAmount = Mathf.Lerp ( timeFillImage.fillAmount, timeFillTarget, Time.deltaTime * fillAmountDamp * 5.0f );
-        else
-            timeFillImage.fillAmount = Mathf.Lerp ( timeFillImage.fillAmount, timeFillTarget, Time.deltaTime * fillAmountDamp );
-
-        
-
-        //if (currentSegmentIndex >= 0)
-        //{
-        //    timeText.text = timeCounter.ToString ( "0.0" ) + " secs";
-        //}
-        //else
-        //{
-        //    timeText.text = "";
-        //}
-
-    }
-
-    private void FinishMultiplier ()
-    {
-        currentSegmentProgress = 0.0f;
+        }       
     }
 
     private void CheckCurrentSegment ()
     {
         if (currentSegmentIndex + 1 < multipliers.Count)
         {
-            if (currentSegmentProgress >= multipliers[currentSegmentIndex + 1].progressRequired)
+            if (currentSegmentProgress >= multipliers[currentSegmentIndex + 1].scoreRequiredForMultiplier)
             {
-                IncreaseSegment ();
-            }
-        }
-
-        if (currentSegmentIndex >= 0)
-        {
-            float progressTarget = 0.0f;
-            progressTarget = multipliers[currentSegmentIndex].progressRequired;
-
-            if (currentSegmentProgress < progressTarget)
-            {
-                DecreaseSegment ();
+                IncreaseMultiplier ();
             }
         }
     }
 
-    private void IncreaseSegment ()
+    private void UpdateFillUI ()
+    {
+        if (currentSegmentIndex >= 0)
+        {
+            float fillX = multipliers[currentSegmentIndex].fillExtents.x;
+            float fillY = multipliers[currentSegmentIndex].fillExtents.y;
+
+            if (currentSegmentIndex != multipliers.Count - 1)
+                multiplierFillTarget = Mathf.Lerp ( 0, highestFill, Mathf.InverseLerp ( multipliers[currentSegmentIndex].scoreRequiredForMultiplier, multipliers[currentSegmentIndex + 1].scoreRequiredForMultiplier, currentSegmentProgress ) );
+            else
+
+                multiplierFillTarget = 1.0f;
+        }
+        else
+        {
+            multiplierFillTarget = 0.0f;
+        }
+
+        multiplierFillImage.fillAmount = Mathf.Lerp ( multiplierFillImage.fillAmount, multiplierFillTarget, Time.deltaTime * fillAmountDamp );
+
+        timeFillTarget = Mathf.Lerp ( 0, highestFill, Mathf.InverseLerp ( 0.0f, currentSegmentIndex >= 0 ? multipliers[currentSegmentIndex].timeGiven : 0.0f, timeCounter ) );
+
+        if (timeFillImage.fillAmount < timeFillTarget)
+            timeFillImage.fillAmount = Mathf.Lerp ( timeFillImage.fillAmount, timeFillTarget, Time.deltaTime * fillAmountDamp * 5.0f );
+        else
+            timeFillImage.fillAmount = Mathf.Lerp ( timeFillImage.fillAmount, timeFillTarget, Time.deltaTime * fillAmountDamp );
+    }
+
+    public void FinishMultiplier ()
+    {
+        currentSegmentProgress = 0.0f;
+        timeCounter = 0;
+    }
+
+    public void IncreaseMultiplier ()
     {
         currentSegmentIndex++;
+        currentSegmentIndex = Mathf.Clamp ( currentSegmentIndex, -1, multipliers.Count - 1);
         parentTween.FadeIn ( 0.25f );
+        timeCounter = multipliers[currentSegmentIndex].timeGiven;
         multiplierText.text = multipliers[currentSegmentIndex].multiplier.ToString ( "0" ) + "x";
 
         OnMultiplierChanged?.Invoke ( GetCurrentMultiplier );
@@ -248,10 +207,21 @@ public class MultiplierManager : MonoBehaviour
         if (currentSegmentIndex >= multipliers.Count - 1) flameTween.FadeIn (0.5f);
     }
 
-    private void DecreaseSegment ()
+    public void DecreaseMultiplier ()
     {
         currentSegmentIndex--;
+        currentSegmentIndex = Mathf.Clamp ( currentSegmentIndex, -1, multipliers.Count - 1 );
         flameTween.FadeOut ( 0.5f );
+
+        if (currentSegmentIndex >= 0)
+        {
+            timeCounter = multipliers[currentSegmentIndex].timeGiven;
+            currentSegmentProgress = multipliers[currentSegmentIndex].scoreRequiredForMultiplier;
+        }
+        else
+        {
+            currentSegmentProgress = 0;
+        }
 
         OnMultiplierChanged?.Invoke ( GetCurrentMultiplier );
 
@@ -270,7 +240,8 @@ public class MultiplierManager : MonoBehaviour
     public class MultiplierSegment
     {
         public float multiplier;
-        public float progressRequired;
+        public float timeGiven;
+        public float scoreRequiredForMultiplier;
         public Vector2 fillExtents = new Vector2 ( 0.05f, 0.5f );
         public Animator anim;
     }

@@ -68,53 +68,54 @@ public class TrashSpawner : MonoBehaviour
 
     private void SpawnTrash(AreaSpawnData areaData, int amount)
     {
-        List<TrashPickupSpawn> s = spawnsByArea[areaData.area].Where ( x => x.HasTrash == false ).ToList ();
+        List<TrashPickupSpawn> availableTrashSpawnPoints = spawnsByArea[areaData.area].Where ( x => x.HasTrash == false ).ToList ();
 
-        int count = Mathf.Min ( amount, s.Count );
-        Shuffle<TrashPickupSpawn> ( ref s );
-        List<TrashType> distribution = new List<TrashType> ()
+        int amountToSpawn = Mathf.Min ( amount, availableTrashSpawnPoints.Count );
+        Shuffle<TrashPickupSpawn> ( ref availableTrashSpawnPoints );
+
+        List<TrashType> trashDistributionWeighting = new List<TrashType> ()
         {
-             TrashType.Bag,
-             TrashType.Bag,
-             TrashType.Bag,
-             TrashType.Bag,
-             TrashType.Bag,
-             TrashType.Plastic,
-             TrashType.Paper,
-             TrashType.Glass,
-             TrashType.Food,
-             TrashType.Metal
+                TrashType.Bag,
+                TrashType.Bag,
+                TrashType.Bag,
+                TrashType.Bag,
+                TrashType.Bag,
+                TrashType.Plastic,
+                TrashType.Paper,
+                TrashType.Glass,
+                TrashType.Food,
+                TrashType.Metal
         };
 
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < amountToSpawn; i++)
         {
-            GameObject prefab = null;
-            TrashType randomType = distribution[Random.Range ( 0, distribution.Count )];
+            GameObject selectedTrashPrefab = null;
+            TrashType randomType = trashDistributionWeighting[Random.Range ( 0, trashDistributionWeighting.Count )];
 
             switch (randomType)
             {
                 case TrashType.Bag:
-                    prefab = trashPrefabs[Random.Range ( 0, trashPrefabs.Count )];
+                    selectedTrashPrefab = trashPrefabs[Random.Range ( 0, trashPrefabs.Count )];
                     break;
                 case TrashType.Plastic:
-                    prefab = plasticPrefabs[Random.Range ( 0, plasticPrefabs.Count )];
+                    selectedTrashPrefab = plasticPrefabs[Random.Range ( 0, plasticPrefabs.Count )];
                     break;
                 case TrashType.Paper:
-                    prefab = paperPrefabs[Random.Range ( 0, paperPrefabs.Count )];
+                    selectedTrashPrefab = paperPrefabs[Random.Range ( 0, paperPrefabs.Count )];
                     break;
                 case TrashType.Glass:
-                    prefab = glassPrefabs[Random.Range ( 0, glassPrefabs.Count )];
+                    selectedTrashPrefab = glassPrefabs[Random.Range ( 0, glassPrefabs.Count )];
                     break;
                 case TrashType.Food:
-                    prefab = foodPrefabs[Random.Range ( 0, foodPrefabs.Count )];
+                    selectedTrashPrefab = foodPrefabs[Random.Range ( 0, foodPrefabs.Count )];
                     break;
                 case TrashType.Metal:
-                    prefab = metalPrefabs[Random.Range ( 0, metalPrefabs.Count )];
+                    selectedTrashPrefab = metalPrefabs[Random.Range ( 0, metalPrefabs.Count )];
                     break;
             }
 
-            s[i].Spawn ( prefab );
-            OnTrashSpawned?.Invoke ( areaData.area, s[i] );
+            availableTrashSpawnPoints[i].Spawn ( selectedTrashPrefab );
+            OnTrashSpawned?.Invoke ( areaData.area, availableTrashSpawnPoints[i] );
             areaData.currentTrashInArea++;
         }
     }

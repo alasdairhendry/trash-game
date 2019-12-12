@@ -45,7 +45,6 @@ public class RaycastWheelSimple : MonoBehaviour {
 	}
 
 	void  GetGround (){
-		grounded = false;
 		Vector3 downwards = transform.TransformDirection (-Vector3.up);
 		RaycastHit hit;
 
@@ -91,9 +90,10 @@ public class RaycastWheelSimple : MonoBehaviour {
 		else
 		{
 			if (graphic) graphic.position = transform.position + (down * maxSuspension);
-		}
-			
-		float speed = parentRigidbody.velocity.magnitude;
+            grounded = false;
+        }
+
+        float speed = parentRigidbody.velocity.magnitude;
 
 		if (graphic) 
 		{
