@@ -75,6 +75,8 @@ public class Citizen : MonoBehaviour
 
     private void OnTriggerEnter (Collider other)
     {
+        return;
+
         if (other.CompareTag ( "truck" ))
         {
             Die ( other );

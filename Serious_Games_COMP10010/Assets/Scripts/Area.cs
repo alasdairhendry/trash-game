@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [RequireComponent(typeof(Rigidbody))]
 public class Area : MonoBehaviour
@@ -31,6 +34,7 @@ public class Area : MonoBehaviour
         areaColliders = GetComponentsInChildren<Collider> ().ToList ();
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos ()
     {
         Bounds bounds = new Bounds ();
@@ -52,4 +56,5 @@ public class Area : MonoBehaviour
         centeredStyle.fontSize = 18;
         Handles.Label ( bounds.center, AreaName, centeredStyle );
     }
+#endif
 }

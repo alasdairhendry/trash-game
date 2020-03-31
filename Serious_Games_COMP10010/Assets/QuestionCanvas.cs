@@ -164,8 +164,8 @@ public class QuestionCanvas : MonoBehaviour
         percentageText.text = correctAnswers.ToString () + "/" + answerAttempts.ToString () + " correct (" + (((float)correctAnswers / (float)answerAttempts) * 100.0f).ToString ( "0" ) + "%)";
     }
 
-    private int correctAnswers = 0;
-    private int answerAttempts = 0;
+    public int correctAnswers { get; protected set; } = 0;
+    public int answerAttempts { get; protected set; } = 0;
 
     public void HidePanel ()
     {

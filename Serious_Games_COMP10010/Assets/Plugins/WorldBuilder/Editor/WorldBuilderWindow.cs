@@ -14,7 +14,7 @@ public class WorldBuilderWindow : EditorWindow
 
     private Vector2 scrollPos = new Vector2 ();
 
-    private GameObject previouslyUsedPrefab = null;
+    private GameObject previouslyUsedReplacePrefab = null;
     private GameObject prefabToAddToReplaceList = null;
 
     public enum Tab { Replace, Place, Array, QuickParent }
@@ -23,9 +23,9 @@ public class WorldBuilderWindow : EditorWindow
     private ArrayTabData arrayTabData = new ArrayTabData () { amount = 1, spacing = 5, target = null, space = Space.World, direction = new Vector3 ( 1.0f, 0.0f, 0.0f ), addToTargetParent = true };
     private static QuickParentData quickParentData = null;
 
-    private GameObject prefabToPlace = null;
+    private List<GameObject> previouslyUsedPlacePrefab = new List<GameObject> ();
 
-    [MenuItem ( "Tools/Open World Builder", priority = 100 )]
+    [MenuItem ( "World Builder/Open World Builder", priority = -1000 )]
     private static void Open ()
     {
         CreateWindow ();
@@ -37,6 +37,7 @@ public class WorldBuilderWindow : EditorWindow
         {
             window = EditorWindow.GetWindow<WorldBuilderWindow> ();
             window.titleContent = new GUIContent ( "World Builder" );
+            window.minSize = new Vector2 ( 345, 345 );
             window.Show ();
         }      
     }
@@ -103,13 +104,16 @@ public class WorldBuilderWindow : EditorWindow
                 }
             }
 
-
+            if (GUILayout.Button ( "Count Scene", EditorStyles.toolbarButton ))
+            {
+                GetSceneData ();
+            }
 
             if (GUILayout.Button ( "Query", EditorStyles.toolbarDropDown ))
             {
                 GenericMenu menu = new GenericMenu ();
-                menu.AddItem ( new GUIContent ( "Create Query" ), false, () => { SelectTopLayerObjects (false); } );
-                menu.AddItem ( new GUIContent ( "Query From Selection" ), false, () => { SelectTopLayerObjects (true); } );
+                menu.AddItem ( new GUIContent ( "Create Query" ), false, () => { SelectTopLayerObjects ( false ); } );
+                menu.AddItem ( new GUIContent ( "Query From Selection" ), false, () => { SelectTopLayerObjects ( true ); } );
                 menu.ShowAsContext ();
             }
         } );
@@ -141,35 +145,54 @@ public class WorldBuilderWindow : EditorWindow
 
     private void Place ()
     {
-        if(prefabToPlace == null)
+        EditorGUILayout.LabelField ( "Previously Used" );
+        for (int i = 0; i < previouslyUsedPlacePrefab.Count; i++)
         {
-            if (Selection.objects.Length >= 1)
+            if (GUILayout.Button ( previouslyUsedPlacePrefab[i].name ))
             {
-                if (PrefabUtility.GetPrefabAssetType ( Selection.objects[0] ) != PrefabAssetType.NotAPrefab)
-                {
-                    prefabToPlace = Selection.objects[0] as GameObject;
-                }
+                GameObject go = PrefabUtility.InstantiatePrefab ( previouslyUsedPlacePrefab[i] ) as GameObject;
+                Undo.RegisterCreatedObjectUndo ( go, "Instantiated Prefab " + previouslyUsedPlacePrefab[i].name );
+                AddPreviouslyPlaced ( previouslyUsedPlacePrefab[i] );
             }
         }
-        //else
-        //{
-        //    //if (SceneView.lastActiveSceneView != null && SceneView.lastActiveSceneView.camera != null)
-        //    //{
-        //        RaycastHit hit;
-        //    //Ray ray = SceneView.lastActiveSceneView.camera.ScreenPointToRay ( Event.current.mousePosition );
-        //    Ray ray = HandleUtility.GUIPointToWorldRay ( Event.current.mousePosition );
 
-        //        if (Physics.Raycast ( ray, out hit ))
-        //        {
-        //            Debug.Log ( hit.collider.gameObject.name );
-        //        }
+        EditorGUILayout.Space ();
 
-        //        //SceneView.lastActiveSceneView.Repaint ();
-        //        Repaint ();
-        //    //}
-        //}
+        EditorGUILayout.LabelField ( "All prefabs" );
+        scrollPos = EditorGUILayout.BeginScrollView ( scrollPos );
+        for (int i = 0; i < pr.Prefabs.Count; i++)
+        {
+            if (GUILayout.Button ( pr.Prefabs[i].name ))
+            {
+                GameObject go = PrefabUtility.InstantiatePrefab ( pr.Prefabs[i] ) as GameObject;
+                Undo.RegisterCreatedObjectUndo ( go, "Instantiated Prefab " + pr.Prefabs[i].name );
+                AddPreviouslyPlaced ( pr.Prefabs[i] );
+            }
+        }
+        EditorGUILayout.EndScrollView ();
 
-        //EditorGUILayout.LabelField ( "Prefab", (prefabToPlace) ? prefabToPlace.name : "null" );
+        DrawAddBox ();
+    }
+
+    private void AddPreviouslyPlaced (GameObject prefab)
+    {
+        if (previouslyUsedPlacePrefab.Contains ( prefab ))
+        {
+            previouslyUsedPlacePrefab.Remove ( prefab );
+            previouslyUsedPlacePrefab.Insert ( 0, prefab );
+        }
+        else
+        {
+            if(previouslyUsedPlacePrefab.Count > 3)
+            {
+                previouslyUsedPlacePrefab.RemoveAt ( previouslyUsedPlacePrefab.Count - 1 );
+                previouslyUsedPlacePrefab.Insert ( 0, prefab );
+            }
+            else
+            {
+                previouslyUsedPlacePrefab.Insert ( 0, prefab );
+            }
+        }
     }
 
     private void QuickParentGUI ()
@@ -572,30 +595,7 @@ public class WorldBuilderWindow : EditorWindow
 
     private void ReplaceGUI ()
     {
-        EditorGUILayout.BeginVertical ( "Box" );
-
-        EditorGUILayout.BeginHorizontal ();
-        prefabToAddToReplaceList = EditorGUILayout.ObjectField ( "Add", prefabToAddToReplaceList, typeof ( GameObject ), false ) as GameObject;
-        if (prefabToAddToReplaceList != null)
-        {
-            if (pr.Prefabs.Contains ( prefabToAddToReplaceList ))
-            {
-                prefabToAddToReplaceList = null;
-            }
-            else
-            {
-                pr.Prefabs.Add ( prefabToAddToReplaceList );
-                prefabToAddToReplaceList = null;
-            }
-        }
-        EditorGUILayout.EndHorizontal ();
-
-        pr.view = (PrefabReplacer.View)EditorGUILayout.EnumPopup ( "View", pr.view );
-
-        EditorGUILayout.EndVertical ();
-
-        EditorGUILayout.Space ();
-        EditorGUILayout.Space ();
+        pr.view = (PrefabReplacer.View)EditorGUILayout.EnumPopup ( "View", pr.view );       
 
         if (pr == null)
         {
@@ -633,6 +633,31 @@ public class WorldBuilderWindow : EditorWindow
                 DoDetailsView ();
                 break;
         }
+
+        DrawAddBox ();
+    }
+
+    private void DrawAddBox ()
+    {
+        GUILayout.FlexibleSpace ();
+        EditorGUILayout.BeginVertical ( "Box" );
+        prefabToAddToReplaceList = EditorGUILayout.ObjectField ( "Add", prefabToAddToReplaceList, typeof ( GameObject ), false ) as GameObject;
+        if (GUILayout.Button ( "Add" ))
+        {
+            if (prefabToAddToReplaceList != null)
+            {
+                if (pr.Prefabs.Contains ( prefabToAddToReplaceList ))
+                {
+                    prefabToAddToReplaceList = null;
+                }
+                else
+                {
+                    pr.Prefabs.Add ( prefabToAddToReplaceList );
+                    prefabToAddToReplaceList = null;
+                }
+            }
+        }
+        EditorGUILayout.EndVertical ();
     }
 
     private void DoDetailsView ()
@@ -649,7 +674,7 @@ public class WorldBuilderWindow : EditorWindow
 
         List<GameObject> sorted = pr.Prefabs.OrderBy ( x => AssetDatabase.GetAssetPath ( x ).Contains ( "City" ) ).ToList ();
 
-        if(previouslyUsedPrefab != null)
+        if(previouslyUsedReplacePrefab != null)
         {
             Horizontal ( () =>
             {
@@ -657,10 +682,10 @@ public class WorldBuilderWindow : EditorWindow
 
                 bool clickedButton = false;
 
-                if (GUILayout.Button ( previouslyUsedPrefab.name ))
+                if (GUILayout.Button ( previouslyUsedReplacePrefab.name ))
                 {
                     clickedButton = true;
-                    ReplaceObjects ( activeObjects, previouslyUsedPrefab, ref newSelection );
+                    ReplaceObjects ( activeObjects, previouslyUsedReplacePrefab, ref newSelection );
                 }
 
                 if (clickedButton)
@@ -711,7 +736,7 @@ public class WorldBuilderWindow : EditorWindow
 
             if (clickedButton)
             {
-                previouslyUsedPrefab = prefab;
+                previouslyUsedReplacePrefab = prefab;
                 Selection.objects = newSelection.ToArray ();
             }
         }
@@ -904,7 +929,7 @@ public class WorldBuilderWindow : EditorWindow
             "Cancel" );
     }
 
-    [MenuItem("Tools/Scene Counter", priority = 100)]
+    [MenuItem( "World Builder/Utilities/Scene Counter", priority = -100 )]
     public static void GetSceneData ()
     {
         List<GameObject> a = GetAllObjectsInScene ();

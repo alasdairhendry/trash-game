@@ -51,22 +51,32 @@ public class GarbageTruck : MonoBehaviour
 
     [SerializeField] private float timePerLevel = 600.0f;
     [SerializeField] private TextMeshProUGUI timeLeft;
-
+    private bool fadedOUt = false;
     private void Update ()
     {
         if(timePerLevel > 0)
         timePerLevel -= Time.deltaTime;
         float mins = timePerLevel / 60.0f;
         mins--;
+        if (mins < 0) mins = 0;
         float secs = timePerLevel % 60.0f;
         timeLeft.text = mins.ToString ( "00" ) + ":" + secs.ToString ( "00" );
 
         if(timePerLevel < 0.0f)
         {
+            Debug.Log ( "END" );
             ShowEndScreen ();
             timePerLevel = 0;
         }
 
+        if (fadedOUt == false)
+        {
+            if (Input.GetKeyDown ( KeyCode.W ))
+            {
+                fadedOUt = true;
+                GameObject.Find ( "startup-instruction-panel" ).GetComponent<UITween> ().FadeOut ( 0.5f );
+            }
+        }
 
         SetDirections ();
         CheckInput ();
@@ -78,7 +88,8 @@ public class GarbageTruck : MonoBehaviour
 
     private void ShowEndScreen ()
     {
-
+        Debug.Log ( "ENDuu" );
+        EndGamePanel.instance.Show ();
     }
 
     private void CheckAir ()
